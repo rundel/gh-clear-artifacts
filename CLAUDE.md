@@ -16,7 +16,8 @@ and age, with a dry-run mode. It is meant to replace inline
 
 ## Critical: the committed bundle
 
-The action runs from `dist/index.js` (see `runs.main` in `action.yml`), which is
+The action runs on the Node.js 24 runtime from `dist/index.js` (see `runs.using`
+and `runs.main` in `action.yml`), which is
 a generated `ncc` bundle that is committed to the repo. After any change under
 `src/` you MUST run `npm run build` and commit the updated `dist/`. CI fails if
 `dist/` is out of date with the source.

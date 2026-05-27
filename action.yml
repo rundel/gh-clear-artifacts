@@ -38,5 +38,5 @@ outputs:
   deleted-names:
     description: 'JSON array of the artifact names that were deleted.'
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

@@ -10,16 +10,16 @@ permissions:
   actions: write
 
 jobs:
-  smoke:
+  test-action:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Create a dummy artifact
         run: echo "hello" > artifact.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
-          name: ca-smoke-${{ github.run_id }}
+          name: ca-test-${{ github.run_id }}
           path: artifact.txt
 
       - name: Dry-run (current branch)
@@ -27,16 +27,11 @@ jobs:
         uses: ./
         with:
           branch: current
-          name: 'ca-smoke-*'
+          name: 'ca-test-*'
           dry-run: true
 
-      - name: Delete the smoke artifact
+      - name: Delete the test artifact
         id: clear
         uses: ./
         with:
-          name: 'ca-smoke-*'
-
-      - name: Report
-        run: |
-          echo "Dry-run would delete: ${{ steps.dry.outputs.deleted-count }}"
-          echo "Deleted: ${{ steps.clear.outputs.deleted-count }}"
+          name: 'ca-test-*'
