@@ -1,0 +1,42 @@
+name: Test Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create a dummy artifact
+        run: echo "hello" > artifact.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ca-smoke-${{ github.run_id }}
+          path: artifact.txt
+
+      - name: Dry-run (current branch)
+        id: dry
+        uses: ./
+        with:
+          branch: current
+          name: 'ca-smoke-*'
+          dry-run: true
+
+      - name: Delete the smoke artifact
+        id: clear
+        uses: ./
+        with:
+          name: 'ca-smoke-*'
+
+      - name: Report
+        run: |
+          echo "Dry-run would delete: ${{ steps.dry.outputs.deleted-count }}"
+          echo "Deleted: ${{ steps.clear.outputs.deleted-count }}"

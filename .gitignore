@@ -1,0 +1,6 @@
+node_modules/
+lib/
+coverage/
+*.log
+
+# dist/ is intentionally committed: the action runs from dist/index.js

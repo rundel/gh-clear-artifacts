@@ -1,0 +1,42 @@
+name: 'Clear Artifacts'
+description: 'Delete workflow artifacts in a repository, optionally scoped by branch, name, or age.'
+author: 'Colin Rundel'
+branding:
+  icon: 'trash-2'
+  color: 'red'
+inputs:
+  token:
+    description: 'GitHub token used to authenticate API requests. Needs the `actions: write` permission to delete artifacts.'
+    required: false
+    default: ${{ github.token }}
+  repository:
+    description: 'Repository to clear artifacts from, in `owner/repo` format.'
+    required: false
+    default: ${{ github.repository }}
+  branch:
+    description: >-
+      Branch scope. Empty (or `all`) deletes artifacts from every branch.
+      `current` deletes artifacts for the branch that triggered this run.
+      Any other value is matched against each artifact's `workflow_run.head_branch`.
+    required: false
+    default: ''
+  name:
+    description: 'Glob pattern for artifact names to delete (e.g. `hw1-*`). Empty deletes all names.'
+    required: false
+    default: ''
+  older-than:
+    description: 'Only delete artifacts created more than this many days ago. Empty or 0 disables the age filter.'
+    required: false
+    default: ''
+  dry-run:
+    description: 'When `true`, log what would be deleted without deleting anything.'
+    required: false
+    default: 'false'
+outputs:
+  deleted-count:
+    description: 'Number of artifacts deleted (or that would be deleted in a dry run).'
+  deleted-names:
+    description: 'JSON array of the artifact names that were deleted.'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
