@@ -1,12 +1,8 @@
 # Clear Artifacts
 
 A GitHub Action that deletes workflow artifacts in a repository. By default it
-removes every artifact (mirroring a hand-rolled `actions/github-script` cleanup
-step), and it adds optional scoping by branch, artifact name, and age, plus a
+removes every artifact, but it includes optional scoping by branch, artifact name, and age, plus a
 dry-run mode.
-
-Unlike a one-page script, this action paginates through all artifacts (not just
-the first 100) and tolerates individual delete failures.
 
 ## Quick start
 
@@ -21,36 +17,6 @@ works as long as the job grants `actions: write`:
 ```yaml
 permissions:
   actions: write
-```
-
-## Migrating from an inline `github-script` step
-
-Before:
-
-```yaml
-- name: Delete artifacts
-  uses: actions/github-script@v8
-  with:
-    script: |
-      const artifacts = await github.rest.actions.listArtifactsForRepo({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        per_page: 100
-      });
-      for (const artifact of artifacts.data.artifacts) {
-        await github.rest.actions.deleteArtifact({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          artifact_id: artifact.id
-        });
-      }
-```
-
-After:
-
-```yaml
-- name: Delete artifacts
-  uses: rundel/gh-clear-artifacts@v1
 ```
 
 ## Examples
